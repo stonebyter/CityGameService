@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CityGameDB.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="gameobj">
+          <Key>
+            <PropertyRef Name="gameobj_id" />
+          </Key>
+          <Property Name="gameobj_id" Type="varchar" MaxLength="64" Nullable="false" />
+          <Property Name="parent_gameobj_id" Type="varchar" MaxLength="64" />
+          <Property Name="player_id" Type="uint" />
+          <Property Name="object_type" Type="uint" />
+          <Property Name="prefab" Type="varchar" MaxLength="255" />
+          <Property Name="pos_x" Type="double" />
+          <Property Name="pos_y" Type="double" />
+          <Property Name="pos_z" Type="double" />
+          <Property Name="rot_x" Type="double" />
+          <Property Name="rot_y" Type="double" />
+          <Property Name="rot_z" Type="double" />
+          <Property Name="rot_w" Type="double" />
+          <Property Name="scale_x" Type="double" />
+          <Property Name="scale_y" Type="double" />
+          <Property Name="scale_z" Type="double" />
+          <Property Name="layer" Type="uint" />
+          <Property Name="tag" Type="varchar" MaxLength="64" />
+        </EntityType>
+        <EntityType Name="player">
+          <Key>
+            <PropertyRef Name="player_id" />
+          </Key>
+          <Property Name="player_id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="login" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <Association Name="fk_child_go_parent_go">
+          <End Role="gameobj" Type="Self.gameobj" Multiplicity="0..1" />
+          <End Role="gameobj1" Type="Self.gameobj" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="gameobj">
+              <PropertyRef Name="gameobj_id" />
+            </Principal>
+            <Dependent Role="gameobj1">
+              <PropertyRef Name="parent_gameobj_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_gameobj_player">
+          <End Role="player" Type="Self.player" Multiplicity="0..1" />
+          <End Role="gameobj" Type="Self.gameobj" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="player">
+              <PropertyRef Name="player_id" />
+            </Principal>
+            <Dependent Role="gameobj">
+              <PropertyRef Name="player_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CityGameDBStoreContainer">
+          <EntitySet Name="gameobj" EntityType="Self.gameobj" Schema="citygame" store:Type="Tables" />
+          <EntitySet Name="player" EntityType="Self.player" Schema="citygame" store:Type="Tables" />
+          <AssociationSet Name="fk_child_go_parent_go" Association="Self.fk_child_go_parent_go">
+            <End Role="gameobj" EntitySet="gameobj" />
+            <End Role="gameobj1" EntitySet="gameobj" />
+          </AssociationSet>
+          <AssociationSet Name="fk_gameobj_player" Association="Self.fk_gameobj_player">
+            <End Role="player" EntitySet="player" />
+            <End Role="gameobj" EntitySet="gameobj" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CityGameDB" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="gameobj">
+          <Key>
+            <PropertyRef Name="gameobj_id" />
+          </Key>
+          <Property Name="gameobj_id" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="parent_gameobj_id" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="player_id" Type="Int64" />
+          <Property Name="object_type" Type="Int64" />
+          <Property Name="prefab" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="pos_x" Type="Double" />
+          <Property Name="pos_y" Type="Double" />
+          <Property Name="pos_z" Type="Double" />
+          <Property Name="rot_x" Type="Double" />
+          <Property Name="rot_y" Type="Double" />
+          <Property Name="rot_z" Type="Double" />
+          <Property Name="rot_w" Type="Double" />
+          <Property Name="scale_x" Type="Double" />
+          <Property Name="scale_y" Type="Double" />
+          <Property Name="scale_z" Type="Double" />
+          <Property Name="layer" Type="Int64" />
+          <Property Name="tag" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="gameobj1" Relationship="Self.fk_child_go_parent_go" FromRole="gameobj" ToRole="gameobj1" />
+          <NavigationProperty Name="gameobj2" Relationship="Self.fk_child_go_parent_go" FromRole="gameobj1" ToRole="gameobj" />
+          <NavigationProperty Name="player" Relationship="Self.fk_gameobj_player" FromRole="gameobj" ToRole="player" />
+        </EntityType>
+        <EntityType Name="player">
+          <Key>
+            <PropertyRef Name="player_id" />
+          </Key>
+          <Property Name="player_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="login" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="gameobj" Relationship="Self.fk_gameobj_player" FromRole="player" ToRole="gameobj" />
+        </EntityType>
+        <Association Name="fk_child_go_parent_go">
+          <End Role="gameobj" Type="Self.gameobj" Multiplicity="0..1" />
+          <End Role="gameobj1" Type="Self.gameobj" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="gameobj">
+              <PropertyRef Name="gameobj_id" />
+            </Principal>
+            <Dependent Role="gameobj1">
+              <PropertyRef Name="parent_gameobj_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_gameobj_player">
+          <End Role="player" Type="Self.player" Multiplicity="0..1" />
+          <End Role="gameobj" Type="Self.gameobj" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="player">
+              <PropertyRef Name="player_id" />
+            </Principal>
+            <Dependent Role="gameobj">
+              <PropertyRef Name="player_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CityGameDBModel" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="gameobj" EntityType="Self.gameobj" />
+          <EntitySet Name="player" EntityType="Self.player" />
+          <AssociationSet Name="fk_child_go_parent_go" Association="Self.fk_child_go_parent_go">
+            <End Role="gameobj" EntitySet="gameobj" />
+            <End Role="gameobj1" EntitySet="gameobj" />
+          </AssociationSet>
+          <AssociationSet Name="fk_gameobj_player" Association="Self.fk_gameobj_player">
+            <End Role="player" EntitySet="player" />
+            <End Role="gameobj" EntitySet="gameobj" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CityGameDBStoreContainer" CdmEntityContainer="CityGameDBModel">
+          <EntitySetMapping Name="gameobj">
+            <EntityTypeMapping TypeName="CityGameDB.gameobj">
+              <MappingFragment StoreEntitySet="gameobj">
+                <ScalarProperty Name="gameobj_id" ColumnName="gameobj_id" />
+                <ScalarProperty Name="parent_gameobj_id" ColumnName="parent_gameobj_id" />
+                <ScalarProperty Name="player_id" ColumnName="player_id" />
+                <ScalarProperty Name="object_type" ColumnName="object_type" />
+                <ScalarProperty Name="prefab" ColumnName="prefab" />
+                <ScalarProperty Name="pos_x" ColumnName="pos_x" />
+                <ScalarProperty Name="pos_y" ColumnName="pos_y" />
+                <ScalarProperty Name="pos_z" ColumnName="pos_z" />
+                <ScalarProperty Name="rot_x" ColumnName="rot_x" />
+                <ScalarProperty Name="rot_y" ColumnName="rot_y" />
+                <ScalarProperty Name="rot_z" ColumnName="rot_z" />
+                <ScalarProperty Name="rot_w" ColumnName="rot_w" />
+                <ScalarProperty Name="scale_x" ColumnName="scale_x" />
+                <ScalarProperty Name="scale_y" ColumnName="scale_y" />
+                <ScalarProperty Name="scale_z" ColumnName="scale_z" />
+                <ScalarProperty Name="layer" ColumnName="layer" />
+                <ScalarProperty Name="tag" ColumnName="tag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="player">
+            <EntityTypeMapping TypeName="CityGameDB.player">
+              <MappingFragment StoreEntitySet="player">
+                <ScalarProperty Name="player_id" ColumnName="player_id" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
