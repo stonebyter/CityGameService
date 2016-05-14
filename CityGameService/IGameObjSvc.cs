@@ -16,15 +16,24 @@ namespace CityGameService
         [WebInvoke( 
             Method="GET", 
             ResponseFormat=WebMessageFormat.Json,
-            UriTemplate="gameobjects" )]   
+            UriTemplate="gameobject/all" )]   
         IList<GameObjDTO> GetUserCreatedGOs();
+
+
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "gameobject/type/{type}"
+            )]
+        IList<GameObjDTO> GetGOsByType(string type);
 
         [OperationContract]
         [WebInvoke(
              Method = "POST",
              RequestFormat = WebMessageFormat.Json,
              ResponseFormat = WebMessageFormat.Json,
-             UriTemplate = "gameobjects")] 
+             UriTemplate = "gameobject")] 
         GameObjDTO SaveUserCreatedGO(GameObjDTO aGameObjDTO);
 
         // TODO: Add your service operations here
@@ -35,6 +44,7 @@ namespace CityGameService
     {
         private string myPlayer;
         private string myGuid;
+        private string myType;
         private string myPrefab;
         private Nullable<int> myLayer;
         private string myTag;
@@ -57,6 +67,13 @@ namespace CityGameService
         {
             get { return myGuid; }
             set { myGuid = value; }
+        }
+
+        [DataMember]
+        public string type
+        {
+            get { return myType; }
+            set { myType = value; }
         }
 
         [DataMember]

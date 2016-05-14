@@ -10,6 +10,36 @@ namespace CityGameService
 {
     public class GameObjSvc : IGameObjSvc
     {
+        IList<GameObjDTO> IGameObjSvc.GetGOsByType(string type)
+        {
+            List<GameObjDTO> res = new List<GameObjDTO>();
+            try
+            {
+                GameObjectType goType = (GameObjectType)Enum.Parse(typeof(GameObjectType), type);
+                System.Diagnostics.Debug.WriteLine("goType=" + (int)goType);
+
+                using (var repo = new CityGameDBModel())
+                {
+                    player player = repo.player.Where<player>(p => p.login.Equals("nomitrey")).FirstOrDefault<player>();
+
+                    List<gameobj> goEntities = repo.gameobj.Where<gameobj>
+                        (go => (go.player_id == player.player_id)
+                               && (go.object_type == (long)goType)).ToList<gameobj>();
+                    foreach (var eGO in goEntities)
+                    {
+                        res.Add(Converters.DtoFromEntity(eGO));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception: " + e);
+            }
+
+            return res;
+
+        }
+
         public IList<GameObjDTO> GetUserCreatedGOs()
         {
             List<GameObjDTO> res = new List<GameObjDTO>();

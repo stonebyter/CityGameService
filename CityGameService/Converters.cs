@@ -5,13 +5,24 @@ using System.Web;
 
 namespace CityGameService
 {
+    public enum GameObjectType
+    {
+        groundObj = 1,
+        generatedObj = 2,
+        userCreatedObj = 3
+    }
+
     public static class Converters
     {
+      
         public static gameobj EntityFromDto( GameObjDTO aGameobjDto, gameobj aGameObjectEntity = null)
         {
             gameobj eGO = aGameObjectEntity == null ? new gameobj() : aGameObjectEntity;
 
+            GameObjectType goType = (GameObjectType)Enum.Parse(typeof(GameObjectType), aGameobjDto.type);
+
             eGO.gameobj_id = aGameobjDto.guid;
+            eGO.object_type = (long)goType;
             eGO.prefab = aGameobjDto.prefab;
             eGO.layer = aGameobjDto.layer;
             eGO.tag = aGameobjDto.tag;
@@ -75,6 +86,7 @@ namespace CityGameService
 
             goDto.guid = aGameobjEntity.gameobj_id;
             goDto.prefab = aGameobjEntity.prefab;
+            goDto.type = Enum.Format(typeof(GameObjectType), (int)aGameobjEntity.object_type, "G");
             goDto.layer = (Nullable<int>)aGameobjEntity.layer;
             goDto.tag = aGameobjEntity.tag;
 
