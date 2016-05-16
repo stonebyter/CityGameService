@@ -15,7 +15,7 @@ namespace CityGameService
         [OperationContract]
         [WebInvoke(
             Method = "GET",
-            ResponseFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,          
             UriTemplate = "gameobject/all")]
         SaveGameDto GetAllGO();
 

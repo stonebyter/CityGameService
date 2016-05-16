@@ -47,11 +47,17 @@ namespace CityGameService
                 eGO.scale_z = aGameobjDto.scale.Z;
             }
             
-            /* TODO handle children */
             for (int i=1; 
                    (aGameobjDto.layerChildren != null )
                 && (i < aGameobjDto.layerChildren.Count);i++)
             {
+                // Remove all current children...
+                if (aGameObjectEntity != null)
+                {
+                    aGameObjectEntity.gameobj1.Clear();
+                }
+
+                // .. and add a new one for each child.
                 gameobj eChild = new gameobj();
                 eChild.gameobj_id = System.Guid.NewGuid().ToString();
                 eChild.prefab = @"none";
