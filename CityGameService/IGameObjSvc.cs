@@ -7,17 +7,17 @@ using System.ServiceModel.Web;
 using System.Text;
 
 namespace CityGameService
-{   
+{
     [ServiceContract]
     public interface IGameObjSvc
     {
 
         [OperationContract]
-        [WebInvoke( 
-            Method="GET", 
-            ResponseFormat=WebMessageFormat.Json,
-            UriTemplate="gameobject/all" )]   
-        IList<GameObjDTO> GetUserCreatedGOs();
+        [WebInvoke(
+            Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "gameobject/all")]
+        SaveGameDto GetAllGO();
 
 
         [OperationContract]
@@ -33,10 +33,35 @@ namespace CityGameService
              Method = "POST",
              RequestFormat = WebMessageFormat.Json,
              ResponseFormat = WebMessageFormat.Json,
-             UriTemplate = "gameobject")] 
-        GameObjDTO SaveUserCreatedGO(GameObjDTO aGameObjDTO);
+             UriTemplate = "gameobject")]
+        void SaveOrUpdateGO(GameObjDTO aGameObjDTO);
 
-        // TODO: Add your service operations here
+        [OperationContract]
+        [WebInvoke(
+            Method = "GET",
+            UriTemplate = "gameobject/delete/{guid}"
+            )]
+        void DeleteGO(string guid);
+    }
+
+
+
+    [DataContract]
+    public class SaveGameDto
+    {
+        private List<GameObjDTO> myGameObjects = new List<GameObjDTO>();
+
+        public SaveGameDto(List<GameObjDTO> aGameObjects)
+        {
+            myGameObjects = aGameObjects;
+        }
+
+        [DataMember]
+        public List<GameObjDTO> gameObjects
+        {
+            get { return myGameObjects; }
+            set { myGameObjects = value; }
+        }
     }
 
     [DataContract]

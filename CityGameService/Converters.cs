@@ -84,6 +84,7 @@ namespace CityGameService
             scale.Y = aGameobjEntity.scale_y;
             scale.Z = aGameobjEntity.scale_z;
 
+            goDto.player = aGameobjEntity.player.login;
             goDto.guid = aGameobjEntity.gameobj_id;
             goDto.prefab = aGameobjEntity.prefab;
             goDto.type = Enum.Format(typeof(GameObjectType), (int)aGameobjEntity.object_type, "G");
@@ -92,15 +93,18 @@ namespace CityGameService
 
             goDto.position = pos;
             goDto.rotation = rot;
+            goDto.scale = scale;
 
             /* TODO handle children */
+            goDto.layerChildren = new List<int>();
+            goDto.tagsChildren = new List<string>();
             for (int i=0; 
                     (aGameobjEntity.gameobj1 != null)
                  && (i< aGameobjEntity.gameobj1.Count); 
                  i++)
             {
-                goDto.layerChildren[i] = (int)aGameobjEntity.gameobj1.ElementAt(i).layer;
-                goDto.tagsChildren[i] = aGameobjEntity.gameobj1.ElementAt(i).tag;
+                goDto.layerChildren.Add( (int)aGameobjEntity.gameobj1.ElementAt(i).layer);
+                goDto.tagsChildren.Add(aGameobjEntity.gameobj1.ElementAt(i).tag);
             }
             /* */
             return goDto;

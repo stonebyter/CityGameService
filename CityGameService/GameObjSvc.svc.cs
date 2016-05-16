@@ -40,7 +40,7 @@ namespace CityGameService
 
         }
 
-        public IList<GameObjDTO> GetUserCreatedGOs()
+        public SaveGameDto GetAllGO()
         {
             List<GameObjDTO> res = new List<GameObjDTO>();
             try
@@ -61,10 +61,10 @@ namespace CityGameService
                 System.Diagnostics.Debug.WriteLine("Exception: " + e);
             }
 
-            return res;
+            return new SaveGameDto(res);
         }
 
-        public GameObjDTO SaveUserCreatedGO(GameObjDTO composite)
+        public void SaveOrUpdateGO(GameObjDTO composite)
         {
             try
             {
@@ -108,7 +108,26 @@ namespace CityGameService
             {
                 System.Diagnostics.Debug.WriteLine("Exception: " + e);                
             }
-            return composite;
+        }
+
+        public void DeleteGO(string guid)
+        {
+            try
+            {
+                using (var repo = new CityGameDBModel())
+                {
+                        gameobj go = repo.gameobj.Where<gameobj>(g => g.gameobj_id.Equals(guid)).FirstOrDefault<gameobj>();
+                        if (go != null)
+                        {   // We have a record...
+                            repo.gameobj.Remove(go);
+                        }
+                        repo.SaveChanges();
+                    }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception: " + e);
+            }
         }
     }
 }
